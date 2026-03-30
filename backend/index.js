@@ -1,10 +1,12 @@
 // ---------------------- IMPORTS ----------------------
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // ---------------------- LOCAL MODULES ----------------------
 const dbConnection = require("./DataBaseConnection");
 const userRoutes = require("./routes/userRoutes");
+const postRouter = require("./routes/postRoutes");
 
 // ---------------------- INITIAL SETUP ----------------------
 const app = express();
@@ -18,13 +20,11 @@ app.use(
   cors({
     origin: ["http://localhost:5173"],
     credentials: true,
-  })
+  }),
 );
-
-// Parse JSON and URL-encoded bodies
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // ---------------------- ROUTES ----------------------
 
@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 
 // Auth routes
 app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/post", postRouter);
 
 // ---------------------- SERVER LISTEN ----------------------
 app.listen(PORT, () => {

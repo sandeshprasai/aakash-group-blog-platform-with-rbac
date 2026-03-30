@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const validateToken = async (req, res) => {
+const validateToken = async (req, res,next) => {
   const accessToken = req.cookies.AccessToken;
 
   if (!accessToken) {
@@ -14,7 +14,10 @@ const validateToken = async (req, res) => {
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server Error " });
+    console.error(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error ", error });
   }
 };
 
