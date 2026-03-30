@@ -3,12 +3,13 @@ import InputField from "../components/InputField";
 import useLoginForm from "../hooks/useLoginForm";
 import { loginUser } from "../services/authService";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { form, errors, handleChange, validate } = useLoginForm();
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
@@ -25,8 +26,7 @@ const Login = () => {
 
       console.log("Login successful", data);
       alert("Login successful!");
-      // Tokens are automatically saved in cookies
-      // Optionally, navigate to dashboard
+      navigate("/posts");
     } catch (err) {
       console.log("Login error", err);
       setServerError(err.message || "Login failed");
