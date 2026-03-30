@@ -7,6 +7,8 @@ const decodeToken = require("../middlewares/RoleBaseAccessTokenCheck/validateRol
 const cretePost = require("../controllers/posts/createPost");
 const getAllPosts = require("../controllers/posts/getAllposts");
 const getMyPosts = require("../controllers/posts/getMyPost");
+
+
 postRouter.post("/create", decodeToken, sanitizeBlogInput, cretePost);
 
 postRouter.get("/all", decodeToken, getAllPosts);
