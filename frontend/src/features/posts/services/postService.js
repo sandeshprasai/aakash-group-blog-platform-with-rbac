@@ -14,3 +14,13 @@ export const fetchPosts = async () => {
     else throw { message: "Failed to fetch posts" };
   }
 };
+
+export const createPost = async (postData) => {
+  try {
+    const res = await api.post("/api/v1/post/create", postData);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.data) throw error.response.data;
+    else throw { message: "Failed to create post" };
+  }
+};
