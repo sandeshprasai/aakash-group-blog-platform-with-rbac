@@ -28,7 +28,7 @@ const Navbar = () => {
           View All Blogs
         </Link>
         <Link
-          to="/posts"
+          to="/my-posts"
           className="text-gray-700 hover:text-blue-500 transition"
         >
           View My Blogs
