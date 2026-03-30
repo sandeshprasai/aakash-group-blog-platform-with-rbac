@@ -23,7 +23,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-
 export const loginUser = async (loginData) => {
   try {
     const response = await api.post("/api/v1/auth/login", loginData, {
@@ -33,5 +32,20 @@ export const loginUser = async (loginData) => {
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;
     else throw { message: "Network Error" };
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    const res = await api.post(
+      "api/v1/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      },
+    );
+    return res.data;
+  } catch (error) {
+    throw { message: "Loout Failled" };
   }
 };
