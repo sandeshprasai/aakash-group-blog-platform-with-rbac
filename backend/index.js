@@ -1,12 +1,42 @@
+// ---------------------- IMPORTS ----------------------
 const express = require("express");
+const cors = require("cors");
 
+// ---------------------- LOCAL MODULES ----------------------
+const dbConnection = require("./DataBaseConnection");
+const userRoutes = require("./routes/userRoutes");
+
+// ---------------------- INITIAL SETUP ----------------------
 const app = express();
-const port = 3000;
+const PORT = process.env.APP_PORT || 5000;
 
+// ---------------------- DATABASE CONNECTION ----------------------
+dbConnection();
+
+// ---------------------- MIDDLEWARE ----------------------
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
+
+// Parse JSON and URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+// ---------------------- ROUTES ----------------------
+
+// Health check / root route
 app.get("/", (req, res) => {
-  res.send(`Hello Blog Post`);
+  res.send("Hello Blog Post");
 });
 
-app.listen(port, () => {
-  console.log(`Server is up and running in ${port}`);
+// Auth routes
+app.use("/api/v1/auth", userRoutes);
+
+// ---------------------- SERVER LISTEN ----------------------
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
