@@ -35,6 +35,15 @@ export const loginUser = async (loginData) => {
   }
 };
 
+export const getCurrentUser = async () => {
+  try {
+    const res = await api.get("/api/v1/auth/me", { withCredentials: true });
+    return res.data;
+  } catch (error) {
+    throw { message: "Not authenticated" };
+  }
+};
+
 export const logoutUser = async () => {
   try {
     const res = await api.post(

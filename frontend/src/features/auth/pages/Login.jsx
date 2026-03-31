@@ -5,11 +5,15 @@ import { loginUser } from "../services/authService";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import { useAuth } from "../../../context/AuthContext";
+import { getCurrentUser } from "../services/authService";
+
 const Login = () => {
   const { form, errors, handleChange, validate } = useLoginForm();
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
@@ -18,13 +22,14 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const data = await loginUser({
+      await loginUser({
         username: form.username,
         password: form.password,
         rememberMe: form.rememberMe,
       });
 
-      console.log("Login successful", data);
+      const data = await getCurrentUser();
+      login(data.user);
       alert("Login successful!");
       navigate("/posts");
     } catch (err) {

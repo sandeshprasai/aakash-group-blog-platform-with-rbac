@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 
-const validateToken = async (req, res,next) => {
+const validateToken = async (req, res, next) => {
   const accessToken = req.cookies.AccessToken;
-
+  
   if (!accessToken) {
     return res
       .status(400)

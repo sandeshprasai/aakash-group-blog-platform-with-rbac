@@ -23,7 +23,7 @@ app.use(
       "https://aakash-group-blog-platform-with-rba.vercel.app",
     ],
     credentials: true,
-  })
+  }),
 );
 app.use(cookieParser());
 app.use(express.json());
