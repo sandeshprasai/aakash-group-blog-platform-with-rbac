@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: import.meta.env.VITE_BASE_BACKEND_URI,
   withCredentials: true, // IMPORTANT (cookies)
 });
 
@@ -27,10 +27,29 @@ export const createPost = async (postData) => {
 
 export const fetchMyPosts = async () => {
   try {
-    const res = await api.get("/api/v1/post/myPosts"); // adjust if needed
+    const res = await api.get("/api/v1/post/my-posts"); // adjust if needed
     return res.data;
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;
     else throw { message: "Failed to fetch your posts" };
+  }
+};
+
+export const deletePost = async (id) => {
+  try {
+    const res = await api.delete(`/api/v1/post/my-post/${id}`);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.data) throw error.response.data;
+    else throw { message: "Failed to delete post" };
+  }
+};
+export const updatePost = async (postData) => {
+  try {
+    const res = await api.put("/api/v1/post/update-my-post", postData);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.data) throw error.response.data;
+    else throw { message: "Failed to update post" };
   }
 };
