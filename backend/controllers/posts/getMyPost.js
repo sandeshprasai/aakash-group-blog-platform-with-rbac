@@ -20,7 +20,7 @@ const getMyPosts = async (req, res) => {
       },
     });
 
-    console.log("MyPosts:", myPosts);
+  
 
     return res
       .status(200)
