@@ -1,6 +1,5 @@
-
 const bcrypt = require("bcryptjs");
-const {User} = require("../../model/");
+const { User } = require("../../model/");
 const jwt = require("jsonwebtoken");
 
 const loginController = async (req, res) => {
@@ -42,11 +41,13 @@ const loginController = async (req, res) => {
     res.cookie("AccessToken", accessToken, {
       httpOnly: true,
       secure: true,
+      sameSite: "none",
       maxAge: Number(process.env.ACCESS_COOKIE_EXPIRY),
     });
     res.cookie("RefreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
+      sameSite: "none",
       maxAge: Number(process.env.REFRESH_COOKIE_EXPIRY),
     });
 
