@@ -5,17 +5,67 @@ import PostList from "../features/posts/pages/PostList";
 import CreatePost from "../features/posts/pages/createPost";
 import MyPosts from "../features/posts/pages/MyPost";
 
-const AppRoutes = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="*" element={<Navigate replace to="/login" />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/posts" element={<PostList />} />
-      <Route path="/create-post" element={<CreatePost />} />
-      <Route path="/my-posts" element={<MyPosts />} />
-    </Routes>
-  </BrowserRouter>
-);
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+
+const AppRoutes = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* DEFAULT ROUTE */}
+        <Route path="/" element={<Navigate to="/posts" />} />
+
+        {/* PUBLIC ROUTES */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+
+        {/* PROTECTED ROUTES */}
+        <Route
+          path="/posts"
+          element={
+            <ProtectedRoute>
+              <PostList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/create-post"
+          element={
+            <ProtectedRoute>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-posts"
+          element={
+            <ProtectedRoute>
+              <MyPosts />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default AppRoutes;
