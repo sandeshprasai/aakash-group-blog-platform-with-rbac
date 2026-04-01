@@ -33,3 +33,5 @@ const deletePostByAdmin = async (req, res) => {
     });
   }
 };
+
+module.exports=deletePostByAdmin

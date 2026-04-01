@@ -5,6 +5,8 @@ import PostList from "../features/posts/pages/PostList";
 import CreatePost from "../features/posts/pages/createPost";
 import MyPosts from "../features/posts/pages/MyPost";
 import PostDetail from "../features/posts/pages/PostDetail/PostDetail";
+import AdminDashboard from "../features/admin/pages/AdminDashboard";
+import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -68,6 +70,15 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <PostDetail />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           }
         />
       </Routes>
