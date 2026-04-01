@@ -1,6 +1,17 @@
+import { useNavigate } from "react-router-dom";
+
 const PostCard = ({ post, onDelete, onEdit, isOwner }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/posts/${post.id}`);
+  };
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div
+      onClick={handleCardClick}
+      className="bg-white shadow-md rounded-lg p-6 cursor-pointer hover:shadow-lg transition"
+    >
       <h3 className="text-xl font-bold mb-2">{post.title}</h3>
 
       <p className="text-gray-600 mb-4 line-clamp-4">
@@ -12,7 +23,10 @@ const PostCard = ({ post, onDelete, onEdit, isOwner }) => {
       </div>
 
       {isOwner && (
-        <div className="flex gap-3">
+        <div
+          className="flex gap-3"
+          onClick={(e) => e.stopPropagation()} // 🔥 IMPORTANT
+        >
           <button
             onClick={() => onEdit(post)}
             className="bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500"

@@ -53,3 +53,12 @@ export const updatePost = async (postData) => {
     else throw { message: "Failed to update post" };
   }
 };
+export const fetchSinglePost = async (id) => {
+  try {
+    const res = await api.get(`/api/v1/post/all/${id}`);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.data) throw error.response.data;
+    else throw { message: "Failed to fetch post" };
+  }
+};

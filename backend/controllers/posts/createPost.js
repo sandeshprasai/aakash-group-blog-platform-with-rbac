@@ -2,8 +2,6 @@ const { Post } = require("../../model/");
 const { User } = require("../../model/");
 
 const createBlog = async (req, res) => {
-  console.log("Request Received at controller")
-  console.log(req.body)
   const { title, body } = req.body;
 
   const userId = req.user.id;

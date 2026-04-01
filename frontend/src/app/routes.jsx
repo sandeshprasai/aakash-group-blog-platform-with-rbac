@@ -4,7 +4,7 @@ import Login from "../features/auth/pages/Login";
 import PostList from "../features/posts/pages/PostList";
 import CreatePost from "../features/posts/pages/createPost";
 import MyPosts from "../features/posts/pages/MyPost";
-
+import PostDetail from "../features/posts/pages/PostDetail/PostDetail";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -12,7 +12,6 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* DEFAULT ROUTE */}
         <Route path="/" element={<Navigate to="/posts" />} />
 
@@ -63,6 +62,14 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/posts/:id"
+          element={
+            <ProtectedRoute>
+              <PostDetail />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
