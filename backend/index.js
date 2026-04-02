@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const postRouter = require("./routes/postRoutes");
 const seedAdmin = require("./controllers/admin/seedAdmin");
 const adminRouter = require("./routes/adminRoutes");
+const commentRouter = require("./routes/commentRoutes");
 
 // ---------------------- INITIAL SETUP ----------------------
 const app = express();
@@ -47,7 +48,8 @@ app.get("/", (req, res) => {
 // Auth routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/post", postRouter);
-app.use("/api/v1/admin",adminRouter)
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/comment", commentRouter);
 
 // ---------------------- SERVER LISTEN ----------------------
 startServer();
