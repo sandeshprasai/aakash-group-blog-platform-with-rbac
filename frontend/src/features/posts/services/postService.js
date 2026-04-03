@@ -2,12 +2,12 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_BACKEND_URI,
-  withCredentials: true, // IMPORTANT (cookies)
+  withCredentials: true,
 });
 
-export const fetchPosts = async () => {
+export const fetchPosts = async (page = 1, limit = 9) => {
   try {
-    const res = await api.get("/api/v1/post/all"); // adjust if endpoint differs
+    const res = await api.get(`/api/v1/post/all?page=${page}&limit=${limit}`);
     return res.data;
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;
@@ -27,7 +27,7 @@ export const createPost = async (postData) => {
 
 export const fetchMyPosts = async () => {
   try {
-    const res = await api.get("/api/v1/post/my-posts"); // adjust if needed
+    const res = await api.get("/api/v1/post/my-posts");
     return res.data;
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;
@@ -44,6 +44,7 @@ export const deletePost = async (id) => {
     else throw { message: "Failed to delete post" };
   }
 };
+
 export const updatePost = async (postData) => {
   try {
     const res = await api.put("/api/v1/post/update-my-post", postData);
@@ -53,6 +54,7 @@ export const updatePost = async (postData) => {
     else throw { message: "Failed to update post" };
   }
 };
+
 export const fetchSinglePost = async (id) => {
   try {
     const res = await api.get(`/api/v1/post/all/${id}`);
