@@ -56,28 +56,143 @@ The application serves two primary roles: **User** and **Admin**. Depending on t
 The project employs a standard monorepo-style structure, decoupling frontend and backend.
 
 ```
-AkashGroupProject/
-├── backend/
-│   ├── config/             # Database/Environment configurations
-│   ├── controllers/        # Route logic (admin, comments, posts, users)
-│   ├── middlewares/        # Custom middlewares (auth tokens, inputs, RBAC)
-│   ├── model/              # Database schema definitions (Sequelize models)
-│   ├── routes/             # Express routing configurations
-│   ├── DataBaseConnection.js # Database Bootstrapper
-│   └── index.js            # Main backend entry point
-├── frontend/
-│   ├── public/             # Static UI assets
-│   ├── src/
-│   │   ├── app/            # Application core settings
-│   │   ├── components/     # Reusable UI components
-│   │   ├── context/        # React Contexts (e.g., AuthContext)
-│   │   ├── features/       # Feature-driven modules (admin, auth, comments, posts)
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API abstraction layers
-│   │   └── utils/          # Helpers and constants
-│   ├── index.html
-│   └── vite.config.js
-└── README.md
+.
+├── backend
+│   ├── config
+│   │   └── database.js
+│   ├── controllers
+│   │   ├── admin
+│   │   │   ├── deletePost.js
+│   │   │   └── seedAdmin.js
+│   │   ├── comments
+│   │   │   ├── createComment.js
+│   │   │   └── getAllComments.js
+│   │   ├── posts
+│   │   │   ├── createPost.js
+│   │   │   ├── deletePost.js
+│   │   │   ├── getAllposts.js
+│   │   │   ├── getMyPost.js
+│   │   │   ├── postDetails.js
+│   │   │   └── updateMyPost.js
+│   │   └── users
+│   │       ├── getCurrentUser.js
+│   │       ├── loginUser.js
+│   │       ├── logout.js
+│   │       └── registerUser.js
+│   ├── DataBaseConnection.js
+│   ├── index.js
+│   ├── middlewares
+│   │   ├── blogValidation
+│   │   │   ├── sanitizeBlogInput.js
+│   │   │   └── sanitizeUpdateBlog.js
+│   │   ├── comments
+│   │   │   └── sanitizeComment.js
+│   │   ├── refreshToken
+│   │   │   └── refreshToken.js
+│   │   ├── RoleBaseAccessTokenCheck
+│   │   │   ├── isAAdminCheck.js
+│   │   │   └── validateRoleFromToken.js
+│   │   └── userInputValidation
+│   │       ├── validateLoginInput.js
+│   │       └── validateRegisterInput.js
+│   ├── model
+│   │   ├── comments.js
+│   │   ├── index.js
+│   │   ├── posts.js
+│   │   └── users.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   └── routes
+│       ├── adminRoutes.js
+│       ├── commentRoutes.js
+│       ├── postRoutes.js
+│       └── userRoutes.js
+├── frontend
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── app
+│   │   │   ├── AdminRoute.jsx
+│   │   │   ├── App.jsx
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── PublicRoute.jsx
+│   │   │   └── routes.jsx
+│   │   ├── assets
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components
+│   │   │   ├── layout
+│   │   │   │   └── Navbar.jsx
+│   │   │   └── ui
+│   │   ├── context
+│   │   │   └── AuthContext.jsx
+│   │   ├── features
+│   │   │   ├── admin
+│   │   │   │   ├── components
+│   │   │   │   │   └── AdminPostCard.jsx
+│   │   │   │   ├── hooks
+│   │   │   │   │   └── useAdminPosts.js
+│   │   │   │   ├── pages
+│   │   │   │   │   └── AdminDashboard.jsx
+│   │   │   │   └── services
+│   │   │   │       └── adminService.js
+│   │   │   ├── auth
+│   │   │   │   ├── components
+│   │   │   │   │   └── InputField.jsx
+│   │   │   │   ├── hooks
+│   │   │   │   │   ├── useLoginForm.js
+│   │   │   │   │   └── useRegisterForm.js
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── Login.jsx
+│   │   │   │   │   └── Register.jsx
+│   │   │   │   └── services
+│   │   │   │       └── authService.js
+│   │   │   ├── comments
+│   │   │   │   ├── components 
+│   │   │   │   │   ├── CommentForm.jsx
+│   │   │   │   │   └── CommentList.jsx
+│   │   │   │   ├── hooks
+│   │   │   │   │   └── useComments.js
+│   │   │   │   └── services
+│   │   │   │       └── commentService.js
+│   │   │   └── posts
+│   │   │       ├── components
+│   │   │       │   └── PostCard.jsx
+│   │   │       ├── hooks
+│   │   │       │   ├── useCreatePost.jsx
+│   │   │       │   ├── useMyPost.jsx
+│   │   │       │   ├── usePostDetail.jsx
+│   │   │       │   └── usePosts.js
+│   │   │       ├── pages
+│   │   │       │   ├── createPost.jsx
+│   │   │       │   ├── MyPost.jsx
+│   │   │       │   ├── PostDetail
+│   │   │       │   │   └── PostDetail.jsx
+│   │   │       │   └── PostList.jsx
+│   │   │       └── services
+│   │   │           └── postService.js
+│   │   ├── hooks
+│   │   ├── main.jsx
+│   │   ├── services
+│   │   ├── store
+│   │   ├── styles
+│   │   │   └── globals.css
+│   │   └── utils
+│   │       └── axiosInstance.js
+│   ├── tailwind.config.js
+│   ├── vercel.json
+│   └── vite.config.js
+├── README.md
+└── SE Internship Task (2).pdf
 ```
 
 ---
@@ -157,12 +272,31 @@ npm install
 
 Create a `.env` file in the `/backend` directory based on required variables:
 ```env
-PORT=5000
-DB_USERNAME=your_pg_username
-DB_PASSWORD=your_pg_password
-DB_DATABASE=your_pg_database_name
-DB_HOST=127.0.0.1
-JWT_SECRET=your_super_secret_jwt_key
+# ---------------------- APP ----------------------
+APP_PORT=3000
+
+# ---------------------- DATABASE ----------------------
+DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
+DB_PORT=5432
+DB_DIALECT=postgres
+
+# ---------------------- JWT ----------------------
+JWT_SECRET=your_jwt_secret
+ACCESS_EXPIRY=1h
+REFRESH_EXPIRY=7d
+
+# ---------------------- COOKIES (in milliseconds) ----------------------
+ACCESS_COOKIE_EXPIRY=3600000
+REFRESH_COOKIE_EXPIRY=604800000
+
+#---------------------------- ADMIN CREDENTIALS--------------------------
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=SuperSecure123!
 ```
 
 Start the backend development server:
@@ -180,7 +314,7 @@ npm install
 
 Create a `.env` file in the `/frontend` directory:
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api/v1
+VITE_BASE_BACKEND_URI=http://localhost:3000
 ```
 
 Start the frontend Vite server:
