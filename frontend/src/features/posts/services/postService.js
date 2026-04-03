@@ -1,9 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_BACKEND_URI,
-  withCredentials: true,
-});
+import api from "../../../utils/axiosInstance";
 
 export const fetchPosts = async (page = 1, limit = 9) => {
   try {
@@ -17,7 +12,9 @@ export const fetchPosts = async (page = 1, limit = 9) => {
 
 export const fetchMyPosts = async (page = 1, limit = 9) => {
   try {
-    const res = await api.get(`/api/v1/post/my-posts?page=${page}&limit=${limit}`);
+    const res = await api.get(
+      `/api/v1/post/my-posts?page=${page}&limit=${limit}`,
+    );
     return res.data;
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;

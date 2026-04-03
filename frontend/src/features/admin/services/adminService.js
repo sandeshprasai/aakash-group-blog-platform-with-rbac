@@ -1,9 +1,6 @@
-import axios from "axios";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_BACKEND_URI, // fix — was hardcoded to localhost
-  withCredentials: true,
-});
+import api from "../../../utils/axiosInstance"
+
 
 export const fetchAllPostsAdmin = async (page = 1, limit = 9) => {
   try {

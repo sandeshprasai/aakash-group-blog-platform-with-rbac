@@ -5,7 +5,7 @@ const validateToken = async (req, res, next) => {
   
   if (!accessToken) {
     return res
-      .status(400)
+      .status(401)
       .json({ success: false, message: "Unauthorized access" });
   }
 

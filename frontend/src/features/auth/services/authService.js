@@ -1,12 +1,4 @@
-import axios from "axios";
-
-// Create an axios instance for backend
-const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_BACKEND_URI, // replace with your backend URL
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import api from "../../../utils/axiosInstance";
 
 // Register function
 export const registerUser = async (userData) => {
