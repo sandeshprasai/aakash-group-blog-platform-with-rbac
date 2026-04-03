@@ -3,20 +3,20 @@ import InputField from "../components/InputField";
 import useRegisterForm from "../hooks/useRegisterForm";
 import { registerUser } from "../services/authService";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const { form, errors, handleChange, validate } = useRegisterForm();
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError("");
 
     if (!validate()) return;
 
     try {
       setLoading(true);
+      const toastId = toast.loading("Registering...");
       const data = await registerUser({
         username: form.username,
         email: form.email,
@@ -25,12 +25,12 @@ const Register = () => {
       });
 
       console.log("Registered Successfully:", data);
-      alert("Registration successful! You can now log in.");
+      toast.success("Registration successful! You can now log in.", { id: toastId });
       // Optionally redirect to login page
       // navigate("/login");
     } catch (err) {
       console.log("Registration Error:", err);
-      setServerError(err.message || "Registration failed");
+      toast.error(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -40,10 +40,6 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-
-        {serverError && (
-          <p className="text-red-500 mb-4 text-center">{serverError}</p>
-        )}
 
         <form onSubmit={handleSubmit}>
           <InputField

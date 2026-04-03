@@ -3,6 +3,7 @@ import useMyPosts from "../hooks/useMyPost";
 import PostCard from "../components/PostCard";
 import { deletePost, updatePost } from "../services/postService";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const MyPosts = () => {
   const {
@@ -18,19 +19,43 @@ const MyPosts = () => {
   const [form, setForm] = useState({ title: "", body: "" });
 
   // DELETE
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
-    try {
-      await deletePost(id);
-      // If deleting the last post on this page, go back one page
-      if (posts.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      } else {
-        setCurrentPage((p) => p); // trigger re-fetch at same page
-      }
-    } catch (err) {
-      alert(err.message);
-    }
+  const handleDelete = (id) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <p className="text-gray-800 font-medium">Are you sure you want to delete this post?</p>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  const toastId = toast.loading("Deleting post...");
+                  await deletePost(id);
+                  toast.success("Post deleted successfully!", { id: toastId });
+                  if (posts.length === 1 && currentPage > 1) {
+                    setCurrentPage((p) => p - 1);
+                  } else {
+                    setCurrentPage((p) => p);
+                  }
+                } catch (err) {
+                  toast.error(err.message);
+                }
+              }}
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
   };
 
   // OPEN EDIT MODAL
@@ -41,17 +66,18 @@ const MyPosts = () => {
 
   // UPDATE
   const handleUpdate = async () => {
+    const toastId = toast.loading("Updating post...");
     try {
       await updatePost({
         post_id: editingPost.id,
         title: form.title,
         body: form.body,
       });
-      alert("Post updated successfully");
+      toast.success("Post updated successfully", { id: toastId });
       setEditingPost(null);
       setCurrentPage((p) => p); // trigger re-fetch
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message, { id: toastId });
     }
   };
 

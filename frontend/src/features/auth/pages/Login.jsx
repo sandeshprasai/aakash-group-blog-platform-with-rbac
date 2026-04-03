@@ -7,21 +7,21 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../context/AuthContext";
 import { getCurrentUser } from "../services/authService";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { form, errors, handleChange, validate } = useLoginForm();
-  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError("");
 
     if (!validate()) return;
 
     try {
       setLoading(true);
+      const toastId = toast.loading("Logging in...");
       await loginUser({
         username: form.username,
         password: form.password,
@@ -30,11 +30,11 @@ const Login = () => {
 
       const data = await getCurrentUser();
       login(data.user);
-      alert("Login successful!");
+      toast.success("Login successful!", { id: toastId });
       navigate("/posts");
     } catch (err) {
       console.log("Login error", err);
-      setServerError(err.message || "Login failed");
+      toast.error(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-
-        {serverError && (
-          <p className="text-red-500 mb-4 text-center">{serverError}</p>
-        )}
 
         <form onSubmit={handleSubmit}>
           <InputField

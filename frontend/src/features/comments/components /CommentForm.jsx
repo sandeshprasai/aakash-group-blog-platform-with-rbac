@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createComment } from "../services/commentService";
+import toast from "react-hot-toast";
 
 const CommentForm = ({ postId, onSuccess }) => {
   const [comment, setComment] = useState("");
@@ -11,15 +12,17 @@ const CommentForm = ({ postId, onSuccess }) => {
 
     try {
       setLoading(true);
+      const toastId = toast.loading("Posting comment...");
       await createComment({
         post_id: postId,
         comment,
       });
 
       setComment("");
+      toast.success("Comment added!", { id: toastId });
       onSuccess(); // reload comments
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to post comment");
     } finally {
       setLoading(false);
     }

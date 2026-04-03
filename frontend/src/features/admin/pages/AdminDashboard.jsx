@@ -2,6 +2,7 @@ import Navbar from "../../../components/layout/Navbar";
 import useAdminPosts from "../hooks/useAdminPosts";
 import AdminPostCard from "../components/AdminPostCard";
 import { deleteAnyPost } from "../services/adminService";
+import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
   const {
@@ -14,19 +15,43 @@ const AdminDashboard = () => {
     totalPages,
   } = useAdminPosts();
 
-  const handleDelete = async (id) => {
-    if (!confirm("Delete this post?")) return;
-    try {
-      await deleteAnyPost(id);
-      // If deleting last post on page, go back one
-      if (posts.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      } else {
-        reload();
-      }
-    } catch (err) {
-      alert(err.message);
-    }
+  const handleDelete = (id) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <p className="text-gray-800 font-medium">Delete this post?</p>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  const toastId = toast.loading("Deleting post...");
+                  await deleteAnyPost(id);
+                  toast.success("Post deleted!", { id: toastId });
+                  if (posts.length === 1 && currentPage > 1) {
+                    setCurrentPage((p) => p - 1);
+                  } else {
+                    reload();
+                  }
+                } catch (err) {
+                  toast.error(err.message);
+                }
+              }}
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
   };
 
   if (loading) {

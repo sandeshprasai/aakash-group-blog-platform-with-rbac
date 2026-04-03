@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/layout/Navbar";
 import useCreatePost from "../hooks/useCreatePost";
 import { createPost } from "../services/postService";
+import toast from "react-hot-toast";
 
 const CreatePost = () => {
   const { form, errors, handleChange, validate, setForm } = useCreatePost();
@@ -12,24 +13,24 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError("");
 
     if (!validate()) return;
 
     try {
       setLoading(true);
+      const toastId = toast.loading("Creating post...");
 
       await createPost({
         title: form.title,
         body: form.body,
       });
 
-      alert("Post created successfully!");
+      toast.success("Post created successfully!", { id: toastId });
       setForm({ title: "", body: "" });
 
       navigate("/posts");
     } catch (err) {
-      setServerError(err.message || "Failed to create post");
+      toast.error(err.message || "Failed to create post");
     } finally {
       setLoading(false);
     }
@@ -44,12 +45,6 @@ const CreatePost = () => {
           <h2 className="text-2xl font-bold mb-6 text-center">
             Create Blog Post
           </h2>
-
-          {serverError && (
-            <p className="text-red-500 mb-4 text-center">
-              {serverError}
-            </p>
-          )}
 
           <form onSubmit={handleSubmit}>
             {/* Title */}
