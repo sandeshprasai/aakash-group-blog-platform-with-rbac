@@ -36,6 +36,15 @@ const Navbar = () => {
         <Link to="/create-post" className="text-gray-700 hover:text-blue-500 transition">
           Create Blog
         </Link>
+        {user?.role === "admin" ? (
+          <Link to="/admin" className="text-gray-700 hover:text-blue-500 transition">
+            Admin Panel
+          </Link>
+        ) : (
+          <span className="text-gray-400 cursor-not-allowed" title="Log in as admin to access the page">
+            Admin Panel
+          </span>
+        )}
 
         <button
           onClick={handleLogout}
