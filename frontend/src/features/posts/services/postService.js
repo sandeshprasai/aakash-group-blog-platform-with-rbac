@@ -15,6 +15,16 @@ export const fetchPosts = async (page = 1, limit = 9) => {
   }
 };
 
+export const fetchMyPosts = async (page = 1, limit = 9) => {
+  try {
+    const res = await api.get(`/api/v1/post/my-posts?page=${page}&limit=${limit}`);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.data) throw error.response.data;
+    else throw { message: "Failed to fetch your posts" };
+  }
+};
+
 export const createPost = async (postData) => {
   try {
     const res = await api.post("/api/v1/post/create", postData);
@@ -22,16 +32,6 @@ export const createPost = async (postData) => {
   } catch (error) {
     if (error.response && error.response.data) throw error.response.data;
     else throw { message: "Failed to create post" };
-  }
-};
-
-export const fetchMyPosts = async () => {
-  try {
-    const res = await api.get("/api/v1/post/my-posts");
-    return res.data;
-  } catch (error) {
-    if (error.response && error.response.data) throw error.response.data;
-    else throw { message: "Failed to fetch your posts" };
   }
 };
 

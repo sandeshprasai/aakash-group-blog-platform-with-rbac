@@ -3,7 +3,7 @@ const { Post } = require("../../model");
 const getAllPosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 6;
+    const limit = parseInt(req.query.limit) || 9;
     const offset = (page - 1) * limit;
 
     const { count, rows } = await Post.findAndCountAll({

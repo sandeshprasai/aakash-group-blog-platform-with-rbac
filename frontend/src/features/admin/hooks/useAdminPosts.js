@@ -5,11 +5,16 @@ const useAdminPosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const loadPosts = async () => {
+  const loadPosts = async (page = currentPage) => {
+    setLoading(true);
+    setError("");
     try {
-      const data = await fetchAllPostsAdmin();
-      setPosts(data.data);
+      const data = await fetchAllPostsAdmin(page);
+      setPosts(data.data || []);
+      setTotalPages(data.pagination?.totalPages || 1);
     } catch (err) {
       setError(err.message || "Error fetching posts");
     } finally {
@@ -18,10 +23,18 @@ const useAdminPosts = () => {
   };
 
   useEffect(() => {
-    loadPosts();
-  }, []);
+    loadPosts(currentPage);
+  }, [currentPage]);
 
-  return { posts, loading, error, reload: loadPosts };
+  return {
+    posts,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    reload: () => loadPosts(currentPage),
+  };
 };
 
 export default useAdminPosts;
